@@ -1,4 +1,4 @@
-//Class for engine
+// Class for engine
 public class Engine {
     private final double speedValue;
     private final String engineName;
