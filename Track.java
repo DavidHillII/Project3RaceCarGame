@@ -10,7 +10,7 @@ public class Track {
     private JPanel panel;
 
     // Constructor for the track
-    public Track(String trackName) {
+    public Track(String trackName, JPanel panel) {
         this.trackName = trackName;
         this.panel = panel;
         this.cars = new ArrayList<>();
