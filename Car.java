@@ -1,13 +1,13 @@
 //Class for car
 
-import java.lang.Math.*;
+import java.lang.Math;
 
 public class Car {
-    private  Engine engine;
-    private Tire tire;
+    private final Engine engine;
+    private final Tire tire;
     private Position carPos;
     private Position targetPos;
-    private double speed;
+    private final double speed;
 
     public Car (Engine engine, Tire tire) {
         this.engine = engine;
