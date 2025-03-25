@@ -15,6 +15,8 @@ public class Car {
         this.speed = this.engine.getSpeedValue() + this.tire.getSpeedValue();
     }
 
+    //add function to update target position
+
     public Position getCarPos() {
         return carPos;
     }
@@ -23,10 +25,10 @@ public class Car {
         //going to calculate the distance using distance formula, if withing the cars speed then return true.
         double carX = carPos.getX();
         double carY = carPos.getY();
-        double checkpointX = targetPos.getX();
-        double checkpointY = targetPos.getY();
+        double stopX = targetPos.getX();
+        double stopY = targetPos.getY();
 
-        double distance = Math.sqrt(Math.pow(checkpointX - carX, 2) + Math.pow(checkpointY - carY, 2));
+        double distance = Math.sqrt(Math.pow(stopX - carX, 2) + Math.pow(stopY - carY, 2));
         return distance <= speed;
     }
 
@@ -34,11 +36,11 @@ public class Car {
     public void move(Position targetPos) {
         double carX = carPos.getX();
         double carY = carPos.getY();
-        double checkpointX = targetPos.getX();
-        double checkpointY = targetPos.getY();
+        double stopX = targetPos.getX();
+        double stopY = targetPos.getY();
 
-        double deltaX = checkpointX - carX;
-        double deltaY = checkpointY - carY;
+        double deltaX = stopX - carX;
+        double deltaY = stopY - carY;
 
         double carAngle = Math.atan2(deltaY, deltaX);
 
