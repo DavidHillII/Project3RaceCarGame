@@ -20,8 +20,14 @@ public class Car {
     }
 
     public boolean isInRange (Position targetPos) {
-        //temporary return statement.
-        return true;
+        //going to calculate the distance using distance formula, if withing the cars speed then return true.
+        double carX = carPos.getX();
+        double carY = carPos.getY();
+        double checkpointX = targetPos.getX();
+        double checkpointY = targetPos.getY();
+
+        double distance = Math.sqrt(Math.pow(checkpointX - carX, 2) + Math.pow(checkpointY - carY, 2));
+        return distance <= speed;
     }
 
     //This method not only moves the car, it also finds the direction it needs to move in.
@@ -38,6 +44,11 @@ public class Car {
 
         double horizontalSpeedComponent = speed * Math.cos(carAngle);
         double verticalSpeedComponent = speed * Math.sin(carAngle);
-        //gonna add a isInRange function.
+        if (isInRange(targetPos)) {
+            carPos = targetPos;
+        }
+        else {
+            carPos = new Position(carPos.getX() + horizontalSpeedComponent, carPos.getY() + verticalSpeedComponent);
+        }
     }
 }
