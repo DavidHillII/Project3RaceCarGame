@@ -20,8 +20,8 @@ public class RaceGUI {
     private JButton startGameButton, startRaceButton, restartButton;
     private CarComponent[] cars = new CarComponent[4];
     private Timer raceTimer;
-    private int[] carX = {1170, 1170, 340, 340};
-    private int[] carY = {500, 220, 220, 500};
+    private int[] carX = {1144, 1170, 394, 340};
+    private int[] carY = {490, 261, 200, 460};
     private JLabel raceTimeLabel;
     private long startTime;
     private JComboBox<String>[] colorPickers = new JComboBox[4];
@@ -324,8 +324,8 @@ public class RaceGUI {
         }
 
         //  Reset car positions
-        carX = new int[]{1170, 1170, 340, 340};
-        carY = new int[]{490, 210, 210, 490};
+        carX = new int[]{1144, 1170, 394, 340};
+        carY = new int[]{490, 261, 200, 460};
 
         //  Create new car components and rotate them
         for (int i = 0; i < 4; i++) {
