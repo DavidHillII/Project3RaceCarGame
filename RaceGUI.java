@@ -8,6 +8,8 @@ import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 import java.util.Random;
+import java.awt.geom.Point2D;
+
 
 
 /**
@@ -48,6 +50,7 @@ public class RaceGUI {
         engines = new ArrayList<>();
         tires = new ArrayList<>();
         track = new Track("Race Track 1");
+        listOfCars = new ArrayList<>();
         frame = new JFrame("Car Racing Game");
 
         frame.setSize(800, 600);
@@ -451,7 +454,8 @@ public class RaceGUI {
 
                 for (int i = 0; i < 4; i++) {
                     carX[i] += speeds.get(i);
-                    cars[i].setLocation(carX[i], carY[i]); // Let the component size handle itself
+                    cars[i].setLocationDouble(carX[i], carY[i]);
+
 
                     if (carX[i] >= 700) {
                         raceFinished = true;
@@ -506,6 +510,12 @@ public class RaceGUI {
     class CarComponent extends JPanel {
         private BufferedImage carImage;
         private double rotationAngle = 0;
+        private Point2D.Double position;
+
+        public void setLocationDouble(double x, double y) {
+            this.position = new Point2D.Double(x, y);
+            super.setLocation((int) x, (int) y);  // Rounds to int for AWT rendering
+        }
 
         /**
          * Constructs a CarComponent with a given image path and initial position.
@@ -517,7 +527,7 @@ public class RaceGUI {
         public CarComponent(String imagePath, double xPosition, double yPosition) {
             carImage = loadImage(imagePath);
             setOpaque(false);
-            setLocation(xPosition, yPosition);
+            setLocationDouble(xPosition, yPosition);
 
             if (carImage != null) {
                 setSize(carImage.getWidth(), carImage.getHeight());
