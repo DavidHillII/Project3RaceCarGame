@@ -14,21 +14,20 @@ public class RaceLogic {
         raceTrack = track;
     }
 
-    public void setListOfStops() {
-        if (raceTrack.getStops() != null) {
-            listOfStops = raceTrack.getStops();
-        }
-        else {
-            System.out.println("The list of stops in the track is null");
-        }
+    public void setListOfStops(ArrayList<Stop> listOfStops) {
+        this.listOfStops = listOfStops;
     }
 
     public ArrayList<Stop> getListOfStops() {
         return listOfStops;
     }
 
-    public void getListOfCars(ArrayList<Car> listOfCars) {
+    public void setListOfCars(ArrayList<Car> listOfCars) {
         this.listOfCars = listOfCars;
+    }
+
+    public ArrayList<Car> getListOfCars() {
+        return listOfCars;
     }
 
     public Track getRaceTrack() {

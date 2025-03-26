@@ -7,29 +7,35 @@ import java.awt.geom.AffineTransform;
 import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
 import java.util.ArrayList;
+import java.util.Random;
 
 
 /**
  * Car Racing Game GUI
  * Manages game screens, timer, and user interaction.
  * Author: Anna Zadorenko
+ * Editor: Gabriel Luciano
  */
 
 public class RaceGUI {
-    private JFrame frame;
+    private final JFrame frame;
     private JPanel welcomePanel, gamePanel;
     private JLabel gameTitle, chooseColorLabel, chooseEngineLabel;
     private JButton startGameButton, startRaceButton, restartButton;
     private CarComponent[] cars = new CarComponent[4];
     private Timer raceTimer;
-    private int[] carX = {1144, 1170, 394, 340};
-    private int[] carY = {490, 261, 200, 460};
+    private double[] carX = {1144, 1170, 394, 340};
+    private double[] carY = {490, 261, 200, 460};
     private JLabel raceTimeLabel;
     private long startTime;
     private JComboBox<String>[] colorPickers = new JComboBox[4];
     private Track track;
     private ArrayList<Stop> stops;
+    private ArrayList<Car> listOfCars;
     private RaceLogic logicHandler;
+    private ArrayList<Engine> engines;
+    private ArrayList<Tire> tires;
+    private Random random;
 
 
     /**
@@ -37,9 +43,13 @@ public class RaceGUI {
      * and adds them to a CardLayout for easy screen switching.
      */
     public RaceGUI() {
+        random = new Random();
         logicHandler = new RaceLogic();
+        engines = new ArrayList<>();
+        tires = new ArrayList<>();
         track = new Track("Race Track 1");
         frame = new JFrame("Car Racing Game");
+
         frame.setSize(800, 600);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setLayout(new CardLayout());
@@ -316,14 +326,44 @@ public class RaceGUI {
         //hands the track to the logicHandler
         logicHandler.setTrack(track);
 
-        //hands the list of stops to the logicHandler
-        logicHandler.setListOfStops();
+        //hands the list of stops and cars to the logicHandler
+        logicHandler.setListOfStops(stops);
+
+
+        //Creating Engines
+        Engine V4engine = new Engine(50, "V4");
+        Engine V6Engine = new Engine(75, "V6");
+        Engine V8Engine = new Engine(100, "V8");
+        Engine V10Engine = new Engine(125, "V10");
+
+        //storing engines
+        engines.add(V4engine);
+        engines.add(V6Engine);
+        engines.add(V8Engine);
+        engines.add(V10Engine);
+
+        //Creating Tires
+        Tire ToyoTire = new Tire(25, "Toyo");
+        Tire FirestoneTire = new Tire(50, "Firestone");
+        Tire PirelliTire = new Tire(75, "Pirelli");
+        Tire GoodyearTire = new Tire(100, "Goodyear");
+
+        //storing tires
+        tires.add(ToyoTire);
+        tires.add(FirestoneTire);
+        tires.add(PirelliTire);
+        tires.add(GoodyearTire);
+
+        //Making and Storing Cars
+        listOfCars.add(new Car(randomObject(engines), randomObject(tires), stops.get(3), stops.get(0), track));
+        listOfCars.add(new Car(randomObject(engines), randomObject(tires), stops.get(0), stops.get(1), track));
+        listOfCars.add(new Car(randomObject(engines), randomObject(tires), stops.get(1), stops.get(2), track));
+        listOfCars.add(new Car(randomObject(engines), randomObject(tires), stops.get(2), stops.get(3), track));
 
         startRaceButton = new JButton("Start the Race");
         startRaceButton.setBounds(600, 700, 150, 50);
         startRaceButton.addActionListener(e -> {
             startRace();
-            logicHandler.beginRace();
         });
         gamePanel.add(startRaceButton);
 
@@ -357,8 +397,8 @@ public class RaceGUI {
         }
 
         //  Reset car positions
-        carX = new int[]{1144, 1170, 394, 340};
-        carY = new int[]{490, 261, 200, 460};
+        carX = new double[]{listOfCars.get(0).getCarPos().getX(), 1170, 394, 340};
+        carY = new double[]{listOfCars.get(0).getCarPos().getY(), 261, 200, 460};
 
         //  Create new car components and rotate them
         for (int i = 0; i < 4; i++) {
@@ -389,12 +429,14 @@ public class RaceGUI {
     }
 
     private void startRace() {
+        logicHandler.beginRace();
+        listOfCars = logicHandler.getListOfCars();
         startRaceButton.setEnabled(false);
         Random random = new Random();
 
-        int[] speeds = new int[4];
-        for (int i = 0; i < 4; i++) {
-            speeds[i] = random.nextInt(3) + 2; // Random speed for each car
+        ArrayList<Double> speeds = new ArrayList<>();
+        for (int i = 0; i < speeds.size(); i++) {
+            speeds.set(i, listOfCars.get(i).getSpeed());
         }
 
         startTime = System.currentTimeMillis();
@@ -408,7 +450,7 @@ public class RaceGUI {
                 boolean raceFinished = false;
 
                 for (int i = 0; i < 4; i++) {
-                    carX[i] += speeds[i];
+                    carX[i] += speeds.get(i);
                     cars[i].setLocation(carX[i], carY[i]); // Let the component size handle itself
 
                     if (carX[i] >= 700) {
@@ -442,7 +484,7 @@ public class RaceGUI {
         }
 
         // Reset car positions to initial starting values
-        carX = new int[]{1170, 1170, 340, 340};
+        carX = new double[]{1170, 1170, 340, 340};
 
         // Recreate cars at starting positions
         for (int i = 0; i < 4; i++) {
@@ -472,7 +514,7 @@ public class RaceGUI {
          * @param xPosition   the X coordinate of the car's initial position
          * @param yPosition   the Y coordinate of the car's initial position
          */
-        public CarComponent(String imagePath, int xPosition, int yPosition) {
+        public CarComponent(String imagePath, double xPosition, double yPosition) {
             carImage = loadImage(imagePath);
             setOpaque(false);
             setLocation(xPosition, yPosition);
@@ -549,5 +591,8 @@ public class RaceGUI {
             g2d.dispose();
         }
 
+    }
+    private <E> E randomObject (ArrayList<E> listOfObjects) {
+        return listOfObjects.get(random.nextInt(4));
     }
 }

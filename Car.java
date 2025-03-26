@@ -6,13 +6,13 @@ import java.util.ArrayList;
 public class Car {
     private Position carPos;
     private Stop target;
-    private final double speed;
+    private double speed;
     private ArrayList<Stop> stops;
     private int stopsPassed;
     private int numOfStops;
     private Track track;
 
-    public Car (Engine engine, Tire tire, Stop target, Track track) {
+    public Car (Engine engine, Tire tire, Stop target, Stop startingPoint, Track track) {
         this.target = target;
         this.speed = engine.getSpeedValue() + tire.getSpeedValue();
         this.track = track;
@@ -34,6 +34,10 @@ public class Car {
     
     public boolean isWinner() {
         return stopsPassed == numOfStops - 1;
+    }
+
+    public double getSpeed() {
+        return speed;
     }
 
     public boolean isInRange () {
