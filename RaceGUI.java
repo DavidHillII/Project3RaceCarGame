@@ -6,6 +6,8 @@ import java.util.Random;
 import java.awt.geom.AffineTransform;
 import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
+import java.util.ArrayList;
+
 
 /**
  * Car Racing Game GUI
@@ -20,11 +22,13 @@ public class RaceGUI {
     private JButton startGameButton, startRaceButton, restartButton;
     private CarComponent[] cars = new CarComponent[4];
     private Timer raceTimer;
-    private int[] carX = {1170, 1170, 340, 340};
-    private int[] carY = {500, 220, 220, 500};
+    private int[] carX = {1144, 1170, 394, 340};
+    private int[] carY = {490, 261, 200, 460};
     private JLabel raceTimeLabel;
     private long startTime;
     private JComboBox<String>[] colorPickers = new JComboBox[4];
+    private Track track;
+    private ArrayList<Stop> stops;
 
     /**
      * Initializes the main game window, sets up the welcome and game screens,
@@ -271,23 +275,38 @@ public class RaceGUI {
         // A point
         JLabel ALabel = new JLabel("A");
         ALabel.setBounds(1155, 420, 30, 100);
+        track.addStop(new Stop(new Position(1155, 420)));
         ALabel.setForeground(Color.BLACK);
         gamePanel.add(ALabel);
         //B point
         JLabel BLabel = new JLabel("B");
         BLabel.setBounds(1155, 220, 30, 100);
+        track.addStop(new Stop(new Position(1155, 220)));
         BLabel.setForeground(Color.BLACK);
         gamePanel.add(BLabel);
         //C point
         JLabel CLabel = new JLabel("C");
         CLabel.setBounds(405, 220, 30, 100);
+        track.addStop(new Stop(new Position(405, 220)));
         CLabel.setForeground(Color.BLACK);
         gamePanel.add(CLabel);
         //D point
         JLabel DLabel = new JLabel("D");
         DLabel.setBounds(405, 420, 30, 100);
+        track.addStop(new Stop(new Position(405, 420)));
         DLabel.setForeground(Color.BLACK);
         gamePanel.add(DLabel);
+
+        stops = track.getStops();
+        for (int i = 0; i < stops.size(); i++) {
+            if (i == stops.size() - 1) {
+                //if its the last stop, the next stop is the first stop
+                stops.get(i).setNextStop(stops.get(0));
+            }
+            else {
+                stops.get(i).setNextStop(stops.get(i + 1));
+            }
+        }
 
         startRaceButton = new JButton("Start the Race");
         startRaceButton.setBounds(600, 700, 150, 50);
@@ -324,8 +343,8 @@ public class RaceGUI {
         }
 
         //  Reset car positions
-        carX = new int[]{1170, 1170, 340, 340};
-        carY = new int[]{490, 210, 210, 490};
+        carX = new int[]{1144, 1170, 394, 340};
+        carY = new int[]{490, 261, 200, 460};
 
         //  Create new car components and rotate them
         for (int i = 0; i < 4; i++) {
