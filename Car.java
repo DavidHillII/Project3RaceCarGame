@@ -9,11 +9,15 @@ public class Car {
     private final double speed;
     private ArrayList<Stop> stops;
     private int stopsPassed;
-    private int currentStop;
+    private int numOfStops;
+    private Track track;
 
-    public Car (Engine engine, Tire tire, Stop target) {
+    public Car (Engine engine, Tire tire, Stop target, Track track) {
         this.target = target;
         this.speed = engine.getSpeedValue() + tire.getSpeedValue();
+        this.track = track;
+        numOfStops = track.getStops().size();
+        stopsPassed = 0;
     }
 
     public void setStops (ArrayList<Stop> stops) {
@@ -29,7 +33,7 @@ public class Car {
     }
     
     public boolean isWinner() {
-        return stopsPassed < currentStop;
+        return stopsPassed == numOfStops - 1;
     }
 
     public boolean isInRange () {
@@ -57,6 +61,7 @@ public class Car {
 
         double horizontalSpeedComponent = speed * Math.cos(carAngle);
         double verticalSpeedComponent = speed * Math.sin(carAngle);
+
         if (isInRange()) {
             carPos = target.getStopPos();
             updateTarget(target.getNextStop());
