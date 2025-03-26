@@ -29,12 +29,15 @@ public class RaceGUI {
     private JComboBox<String>[] colorPickers = new JComboBox[4];
     private Track track;
     private ArrayList<Stop> stops;
+    private RaceLogic logicHandler;
+
 
     /**
      * Initializes the main game window, sets up the welcome and game screens,
      * and adds them to a CardLayout for easy screen switching.
      */
     public RaceGUI() {
+        logicHandler = new RaceLogic();
         frame = new JFrame("Car Racing Game");
         frame.setSize(800, 600);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -297,6 +300,7 @@ public class RaceGUI {
         DLabel.setForeground(Color.BLACK);
         gamePanel.add(DLabel);
 
+        //adds the aforementioned Stops to the ArrayList of stops.
         stops = track.getStops();
         for (int i = 0; i < stops.size(); i++) {
             if (i == stops.size() - 1) {
@@ -308,9 +312,18 @@ public class RaceGUI {
             }
         }
 
+        //hands the track to the logicHandler
+        logicHandler.setTrack(track);
+
+        //hands the list of stops to the logicHandler
+        logicHandler.setListOfStops();
+
         startRaceButton = new JButton("Start the Race");
         startRaceButton.setBounds(600, 700, 150, 50);
-        startRaceButton.addActionListener(e -> startRace());
+        startRaceButton.addActionListener(e -> {
+            startRace();
+            logicHandler.beginRace();
+        });
         gamePanel.add(startRaceButton);
 
         restartButton = new JButton("Start Again");

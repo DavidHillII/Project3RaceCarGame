@@ -4,44 +4,40 @@ import java.lang.Math;
 import java.util.ArrayList;
 
 public class Car {
-    private final Engine engine;
-    private final Tire tire;
     private Position carPos;
-    private Position targetPos;
+    private Stop target;
     private final double speed;
     private ArrayList<Stop> stops;
     private int stopsPassed;
+    private int currentStop;
 
-    public Car (Engine engine, Tire tire, Position targetPos) {
-        this.engine = engine;
-        this.tire = tire;
-        this.targetPos = targetPos;
-        this.speed = this.engine.getSpeedValue() + this.tire.getSpeedValue();
+    public Car (Engine engine, Tire tire, Stop target) {
+        this.target = target;
+        this.speed = engine.getSpeedValue() + tire.getSpeedValue();
     }
 
-    public void getStops (ArrayList<Stop> stops) {
+    public void setStops (ArrayList<Stop> stops) {
         this.stops = stops;
     }
     
-    public void updateTargetPos () {
-        
-        targetPos = newTargetPos;
+    public void updateTarget (Stop newTarget) {
+        target = newTarget;
     }
 
     public Position getCarPos() {
         return carPos;
     }
     
-    public boolean isWinner(int numOfStops) {
-        return stopsPassed < numOfStops;
+    public boolean isWinner() {
+        return stopsPassed < currentStop;
     }
 
-    public boolean isInRange (Position targetPos) {
+    public boolean isInRange () {
         //going to calculate the distance using distance formula, if withing the cars speed then return true.
         double carX = carPos.getX();
         double carY = carPos.getY();
-        double stopX = targetPos.getX();
-        double stopY = targetPos.getY();
+        double stopX = target.getStopPos().getX();
+        double stopY = target.getStopPos().getY();
 
         double distance = Math.sqrt(Math.pow(stopX - carX, 2) + Math.pow(stopY - carY, 2));
         return distance <= speed;
@@ -51,8 +47,8 @@ public class Car {
     public void move() {
         double carX = carPos.getX();
         double carY = carPos.getY();
-        double stopX = targetPos.getX();
-        double stopY = targetPos.getY();
+        double stopX = target.getStopPos().getX();
+        double stopY = target.getStopPos().getY();
 
         double deltaX = stopX - carX;
         double deltaY = stopY - carY;
@@ -61,8 +57,9 @@ public class Car {
 
         double horizontalSpeedComponent = speed * Math.cos(carAngle);
         double verticalSpeedComponent = speed * Math.sin(carAngle);
-        if (isInRange(targetPos)) {
-            carPos = targetPos;
+        if (isInRange()) {
+            carPos = target.getStopPos();
+            updateTarget(target.getNextStop());
             stopsPassed++;
         }
         else {
