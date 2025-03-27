@@ -38,6 +38,9 @@ public class RaceGUI {
     private ArrayList<Engine> engines;
     private ArrayList<Tire> tires;
     private Random random;
+    private boolean[] carFinished = new boolean[4];
+    private double[] finishTimes = new double[4];
+
 
 
     /**
@@ -455,30 +458,70 @@ public class RaceGUI {
         }
 
         startTime = System.currentTimeMillis();
+        for (int i = 0; i < 4; i++) {
+            carFinished[i] = false;
+            finishTimes[i] = 0;
+        }
 
         raceTimer = new Timer(40, new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                boolean raceFinished = false;
                 for (int i = 0; i < listOfCars.size(); i++) {
                     Car car = listOfCars.get(i);
-                    car.move(); // Update the car's model position
+                    car.move();
                     double newX = car.getCarPos().getX();
                     double newY = car.getCarPos().getY();
                     cars[i].setLocationDouble(newX, newY);
-                    if (car.isWinner()) {
-                        raceFinished = true;
+
+                    if (car.isWinner() && !carFinished[i]) {
+                        carFinished[i] = true;
+                        finishTimes[i] = (System.currentTimeMillis() - startTime) / 1000.0;
                     }
                 }
+
                 gamePanel.repaint();
-                if (raceFinished) {
+
+                boolean allFinished = true;
+                for (boolean finished : carFinished) {
+                    if (!finished) {
+                        allFinished = false;
+                        break;
+                    }
+                }
+
+                if (allFinished) {
                     raceTimer.stop();
                     restartButton.setVisible(true);
-                    JOptionPane.showMessageDialog(frame, "Race Over!");
+
+                    int winnerIndex = 0;
+                    for (int i = 1; i < finishTimes.length; i++) {
+                        if (finishTimes[i] < finishTimes[winnerIndex]) {
+                            winnerIndex = i;
+                        }
+                    }
+
+                    StringBuilder results = new StringBuilder();
+                    results.append("🏁 Race Over!\n");
+                    results.append("Car ").append(winnerIndex + 1)
+                            .append(" wins! Finished in ")
+                            .append(String.format("%.2f", finishTimes[winnerIndex]))
+                            .append(" seconds.\n");
+
+                    for (int i = 0; i < finishTimes.length; i++) {
+                        if (i != winnerIndex) {
+                            results.append("Car ").append(i + 1)
+                                    .append(" finished in ")
+                                    .append(String.format("%.2f", finishTimes[i]))
+                                    .append(" seconds.\n");
+                        }
+                    }
+
+                    JOptionPane.showMessageDialog(frame, results.toString());
                 }
             }
         });
         raceTimer.start();
+
     }
 
     /**
