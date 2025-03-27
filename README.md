@@ -1,2 +1,2 @@
 For this Java Project, our group made a Racecar Game as instructed. Cars travel around a track by following their specific route of checkpoints and are timed on their ability to cross the finish line and win the race.
-In this project for this game we created a design in which included a GUI, many object oriented classes for the components of the Raceing Game(car, track, stop), and also class for the logic of the game. 
+In this project for the game, we created a design that included a GUI, many object oriented classes for the components of the racing game (car, track, stop), and a class for the logic of the game. 
