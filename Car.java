@@ -1,4 +1,5 @@
 //Gabriel 
+//Minor help by David with codetogether
 import java.lang.Math;
 import java.util.ArrayList;
 
