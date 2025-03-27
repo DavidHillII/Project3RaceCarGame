@@ -1,3 +1,4 @@
+//Gabriel
 //FINISHED ON 3/27/2025
 public class Tire {
     private final double speedValue;
