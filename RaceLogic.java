@@ -1,3 +1,5 @@
+//Gabriel
+//some help by David
 import java.util.ArrayList;
 
 //FINISHED ON 3/27/2025
