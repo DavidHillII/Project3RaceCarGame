@@ -1,6 +1,8 @@
 import java.util.ArrayList;
 
 //FINISHED ON 3/27/2025
+
+//This class mainly behaves like an intersection between the other classes, allowing for an easy and safe exchange of information.
 public class RaceLogic {
     private ArrayList<Stop> listOfStops;
     private ArrayList<Car> listOfCars;
@@ -25,30 +27,6 @@ public class RaceLogic {
 
     public ArrayList<Car> getListOfCars() {
         return listOfCars;
-    }
-
-    public void beginRace() {
-        //gives all the cars the list of stops so they can calculate the pathfinding
-        for (Car car : listOfCars) {
-            car.setStops(listOfStops);
-        }
-        System.out.println("SET STOPS: DONE");
-
-        //actual game running
-        boolean gameOver = false;
-        while (!gameOver) {
-            for (Car car : listOfCars) {
-                System.out.println("MOVING CARS: DONE");
-                car.move();
-                gameOver = car.isWinner();
-                if (gameOver) {
-                    System.out.println("IF STATEMENT PROCKED");
-                    break;
-                }
-            }
-            System.out.println("FOR LOOP DONE");
-        }
-        System.out.println("WHILE LOOP DONE");
     }
 }
 

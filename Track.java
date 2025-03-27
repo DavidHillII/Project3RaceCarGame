@@ -6,30 +6,29 @@ public class Track {
     private ArrayList<Car> cars;
     private ArrayList<Stop> stops;
 
-    // Constructor for the track
+    //Constructor for the track
     public Track(String trackName) {
         this.trackName = trackName;
         this.cars = new ArrayList<>();
         this.stops = new ArrayList<>();
     }
 
-    // A function for returning the name of the track
+    //A function for returning the name of the track
     public String getTrackName() {
         return trackName;
     }
 
-    // A function for returning the number of checkpoints on the track
+    //A function for returning the number of checkpoints on the track
     public int getNumCheckpoints() {
         return stops.size();
     }
 
-
-    // Stops are added to the track
+    //Stops are added to the track
     public void addStop(Stop stop) {
         stops.add(stop);
     }
     
-    // Function to return the Arraylist of stops
+    //Function to return the Arraylist of stops
     public ArrayList<Stop> getStops() {
         return stops;
     }

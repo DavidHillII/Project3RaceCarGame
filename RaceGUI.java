@@ -49,7 +49,6 @@ public class RaceGUI {
      * and adds them to a CardLayout for easy screen switching.
      */
     public RaceGUI() {
-        System.out.println("RaceGUI started");
         random = new Random();
         logicHandler = new RaceLogic();
         engines = new ArrayList<>();
@@ -112,7 +111,6 @@ public class RaceGUI {
         startGameButton = new JButton("Start the Game");
         startGameButton.setBounds(700, 600, 150, 50);
         startGameButton.addActionListener(e -> showGameScreen());
-        System.out.println("Start the game button pressed");
         welcomePanel.add(startGameButton);
     }
 
@@ -283,36 +281,40 @@ public class RaceGUI {
 
         gamePanel.setBackground(Color.WHITE);
 
-        //  Add Race Timer Label
+        //Add Race Timer Label
         raceTimeLabel = new JLabel("Race Time: 0.0s");
         raceTimeLabel.setFont(new Font("Arial", Font.BOLD, 18));
         raceTimeLabel.setBounds(1200, 25, 200, 30); // Position at top-right
         gamePanel.add(raceTimeLabel);
 
+        //Add Game Title label
         JLabel gameTitle = new JLabel("Car Racing Game", SwingConstants.CENTER);
         gameTitle.setFont(new Font("Arial", Font.BOLD, 28));
         gameTitle.setForeground(Color.BLACK);
         gameTitle.setBounds(620, 30, 300, 40);
         gamePanel.add(gameTitle);
 
-        // A point
+        //A point
         JLabel ALabel = new JLabel("A");
         ALabel.setBounds(1156, 424, 30, 100);
         track.addStop(new Stop(new Position(1156, 424)));
         ALabel.setForeground(Color.WHITE);
         gamePanel.add(ALabel);
+
         //B point
         JLabel BLabel = new JLabel("B");
         BLabel.setBounds(1156, 224, 30, 100);
         track.addStop(new Stop(new Position(1156, 224)));
         BLabel.setForeground(Color.WHITE);
         gamePanel.add(BLabel);
+
         //C point
         JLabel CLabel = new JLabel("C");
         CLabel.setBounds(406, 224, 30, 100);
         track.addStop(new Stop(new Position(406, 224)));
         CLabel.setForeground(Color.WHITE);
         gamePanel.add(CLabel);
+
         //D point
         JLabel DLabel = new JLabel("D");
         DLabel.setBounds(406, 424, 30, 100);
@@ -320,6 +322,7 @@ public class RaceGUI {
         DLabel.setForeground(Color.WHITE);
         gamePanel.add(DLabel);
 
+        //Sets the "nextStop" Attributes in the Stop objects
         for (int i = 0; i < track.getStops().size(); i++) {
             if (i == track.getStops().size() - 1) {
                 track.getStops().get(i).setNextStop(track.getStops().getFirst());
@@ -328,14 +331,15 @@ public class RaceGUI {
                 track.getStops().get(i).setNextStop(track.getStops().get(i + 1));
             }
         }
+
         //adds the aforementioned Stops to the ArrayList of stops.
         stops = track.getStops();
 
         //Creating Engines
-        Engine V4engine = new Engine(50, "V4");
-        Engine V6Engine = new Engine(75, "V6");
-        Engine V8Engine = new Engine(100, "V8");
-        Engine V10Engine = new Engine(125, "V10");
+        Engine V4engine = new Engine(50);
+        Engine V6Engine = new Engine(75);
+        Engine V8Engine = new Engine(100);
+        Engine V10Engine = new Engine(125);
 
         //storing engines
         engines.add(V4engine);
@@ -344,10 +348,10 @@ public class RaceGUI {
         engines.add(V10Engine);
 
         //Creating Tires
-        Tire ToyoTire = new Tire(25, "Toyo");
-        Tire FirestoneTire = new Tire(50, "Firestone");
-        Tire PirelliTire = new Tire(75, "Pirelli");
-        Tire GoodyearTire = new Tire(100, "Goodyear");
+        Tire ToyoTire = new Tire(25);
+        Tire FirestoneTire = new Tire(50);
+        Tire PirelliTire = new Tire(75);
+        Tire GoodyearTire = new Tire(100);
 
         //storing tires
         tires.add(ToyoTire);
@@ -356,7 +360,6 @@ public class RaceGUI {
         tires.add(GoodyearTire);
 
         //Making and Storing Cars
-
         listOfCars.add(new Car(randomObject(engines), randomObject(tires), stops.get(0), track));
         listOfCars.add(new Car(randomObject(engines), randomObject(tires), stops.get(1), track));
         listOfCars.add(new Car(randomObject(engines), randomObject(tires), stops.get(2), track));
@@ -369,15 +372,13 @@ public class RaceGUI {
         logicHandler.setListOfStops(stops);
         logicHandler.setListOfCars(listOfCars);
 
-
+        //Creates the "Start the Race" button
         startRaceButton = new JButton("Start the Race");
         startRaceButton.setBounds(600, 700, 150, 50);
-        startRaceButton.addActionListener(e -> {
-            System.out.println("Start the Race button pressed");
-            startRace();
-        });
+        startRaceButton.addActionListener(e -> {startRace();});
         gamePanel.add(startRaceButton);
 
+        //Creates the "Start Again" button
         restartButton = new JButton("Start Again");
         restartButton.setBounds(800, 700, 150, 50);
         restartButton.setVisible(false);
@@ -394,20 +395,20 @@ public class RaceGUI {
     private void showGameScreen() {
         ((CardLayout) frame.getContentPane().getLayout()).show(frame.getContentPane(), "Game");
 
-        // Reset timer and buttons
+        //Reset timer and buttons
         raceTimeLabel.setText("Race Time: 0.0s");
         startRaceButton.setVisible(true);
         startRaceButton.setEnabled(true);
         restartButton.setVisible(false);
 
-        //  Remove previous cars from the gamePanel
+        //Remove previous cars from the gamePanel
         for (CarComponent car : cars) {
             if (car != null) {
                 gamePanel.remove(car);
             }
         }
 
-        //  Reset car positions
+        //Reset car positions
         carX = new double[]{listOfCars.get(0).getCarPos().getX(),
                             listOfCars.get(1).getCarPos().getX(),
                             listOfCars.get(2).getCarPos().getX(),
@@ -418,12 +419,12 @@ public class RaceGUI {
                             listOfCars.get(2).getCarPos().getY(),
                             listOfCars.get(3).getCarPos().getY()};
 
-        //  Create new car components and rotate them
+        //Create new car components and rotate them
         for (int i = 0; i < 4; i++) {
             int selectedIndex = colorPickers[i].getSelectedIndex();
             cars[i] = new CarComponent(carImagePaths[selectedIndex], carX[i], carY[i]);
 
-            // Set car direction (rotation)
+            //Set car direction (rotation)
             switch (i) {
                 case 0:
                     cars[i].setRotationAngle(Math.toRadians(-90));
@@ -445,13 +446,13 @@ public class RaceGUI {
         gamePanel.revalidate();
         gamePanel.repaint();
     }
+    //This function is called by the action listener on line 380
     private void startRace() {
-        System.out.println("Starting Race");
-        //logicHandler.beginRace();
         listOfCars = logicHandler.getListOfCars();
         startRaceButton.setEnabled(false);
         Random random = new Random();
 
+        //Creates and initializes and arrayList holding all the speed values for the cars
         ArrayList<Double> speeds = new ArrayList<>();
         for (int i = 0; i < listOfCars.size(); i++) {
             speeds.add(listOfCars.get(i).getSpeed());
@@ -463,21 +464,12 @@ public class RaceGUI {
             finishTimes[i] = 0;
         }
 
+        /* The timer tells the program when to move the cars and when to turn the cars
+         * The 40 in the first parameter of the Timer declaration is the delay between commands (i.e move -> *wait 40 milliseconds* -> move again)
+         */
         raceTimer = new Timer(40, new ActionListener() {
-
             @Override
             public void actionPerformed(ActionEvent e) {
-                //debugging
-                System.out.println(listOfCars.size());
-                for (int i = 0; i < 4; i++) {
-                    if (listOfCars.get(i).getTarget() == null) {
-                        System.out.println(i + ": Target is null");
-                    }
-                    else {
-                        System.out.println(i + ": Target is " + listOfCars.get(i).getTarget());
-                    }
-                }
-
                 for (int i = 0; i < listOfCars.size(); i++) {
                     if (carFinished[i]) continue;
                     Car car = listOfCars.get(i);
@@ -486,30 +478,30 @@ public class RaceGUI {
                     raceTimeLabel.setText(String.format("Race Time: %.1fs", elapsedSeconds));
 
 
-// Save old position
+                    //Save old position
                     double prevX = car.getCarPos().getX();
                     double prevY = car.getCarPos().getY();
 
-// Move car
+                    //Move car
                     car.move();
 
-// Get new position
+                    //Get new position
                     double newX = car.getCarPos().getX();
                     double newY = car.getCarPos().getY();
 
-// Calculate direction change
+                    //Calculate direction change
                     double dx = newX - prevX;
                     double dy = newY - prevY;
 
-// Compute angle of movement
+                    //Compute angle of movement
                     double angle = Math.atan2(dy, dx);
                     double degrees = Math.toDegrees(angle);
 
-// Snap to nearest 90 degrees (e.g., 0°, 90°, 180°, 270°)
+                    //Snap to nearest 90 degrees (e.g., 0°, 90°, 180°, 270°)
                     double snapped = Math.round(degrees / 90.0) * 90.0;
                     double snappedRadians = Math.toRadians(snapped);
 
-// Update visual
+                    //Update visual
                     cars[i].setLocationDouble(newX, newY);
                     cars[i].setRotationAngle(snappedRadians);
 
@@ -731,6 +723,8 @@ public class RaceGUI {
         }
 
     }
+
+    //Simple function that will take in an arrayList of any type and return a random index of said arrayList.
     private <E> E randomObject (ArrayList<E> listOfObjects) {
         return listOfObjects.get(random.nextInt(4));
     }

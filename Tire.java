@@ -1,16 +1,14 @@
 //FINISHED ON 3/27/2025
 public class Tire {
     private final double speedValue;
-    private final String tireName;
 
-    public Tire (double speedValue, String tireName) {
+    //Constructor for the Tire
+    public Tire (double speedValue) {
         this.speedValue = speedValue;
-        this.tireName = tireName;
     }
+
+    //Returns Speed so it may be used in calculations
     public double getSpeedValue() {
         return speedValue;
-    }
-    public String getTireName() {
-        return tireName;
     }
 }

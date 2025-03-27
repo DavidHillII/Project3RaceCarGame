@@ -22,14 +22,6 @@ public class Car {
         stopsPassed = 0;
     }
 
-    public void setStops (ArrayList<Stop> stops) {
-        this.stops = stops;
-    }
-
-    public Stop getTarget() {
-        return target;
-    }
-    
     public void updateTarget (Stop newTarget) {
         target = newTarget;
     }
@@ -37,7 +29,8 @@ public class Car {
     public Position getCarPos() {
         return carPos;
     }
-    
+
+    //Determines if this Car has won the race, the criteria is as follows. (The first car to cross
     public boolean isWinner() {
         return stopsPassed == numOfStops - 1;
     }
@@ -46,8 +39,8 @@ public class Car {
         return speed;
     }
 
+    //going to calculate the distance using distance formula, if the target is within the Cars "speed" then return true, if not return false.
     public boolean isInRange () {
-        //going to calculate the distance using distance formula, if withing the cars speed then return true.
         double carX = carPos.getX();
         double carY = carPos.getY();
         double stopX = target.getStopPos().getX();
@@ -57,7 +50,7 @@ public class Car {
         return distance <= speed;
     }
 
-    //This method not only moves the car, it also finds the direction it needs to move in.
+    //This method finds the direction it needs to move it, uses the "isInRange" method to determine if it is in its range, then move accordingly.
     public void move() {
         if (isWinner()) return;
         double carX = carPos.getX();
