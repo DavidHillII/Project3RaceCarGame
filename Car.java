@@ -6,6 +6,8 @@ public class Car {
     private Position carPos;
     private Stop startingPoint;
     private Stop target;
+    private Engine engine;
+    private Tire tire;
     private double speed;
     private ArrayList<Stop> stops;
     private int stopsPassed;
@@ -13,6 +15,8 @@ public class Car {
     private Track track;
 
     public Car (Engine engine, Tire tire, Stop startingPoint, Track track) {
+        this.engine = engine;
+        this.tire = tire;
         this.startingPoint = startingPoint;
         this.target = startingPoint.getNextStop();
         this.speed = (engine.getSpeedValue() + tire.getSpeedValue())*0.02;

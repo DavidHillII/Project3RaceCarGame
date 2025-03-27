@@ -7,10 +7,8 @@ import java.awt.geom.AffineTransform;
 import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
 import java.util.ArrayList;
-import java.util.Random;
 import java.awt.geom.Point2D;
-
-
+import java.util.Random;
 
 /**
  * FINISHED ON 3/27/2025
@@ -38,16 +36,15 @@ public class RaceGUI {
     private RaceLogic logicHandler;
     private ArrayList<Engine> engines;
     private ArrayList<Tire> tires;
-    private Random random;
+    private final Random random;
     private boolean[] carFinished = new boolean[4];
     private double[] finishTimes = new double[4];
-
-
 
     /**
      * Initializes the main game window, sets up the welcome and game screens,
      * and adds them to a CardLayout for easy screen switching.
      */
+
     public RaceGUI() {
         random = new Random();
         logicHandler = new RaceLogic();
