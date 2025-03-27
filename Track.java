@@ -1,4 +1,4 @@
-//Class for racetrack David Hill Gabriel Luciano
+//FINISHED ON 3/27/2025
 import java.util.ArrayList;
 
 public class Track {

@@ -1,10 +1,10 @@
-//Class for car
-
 import java.lang.Math;
 import java.util.ArrayList;
 
+//FINISHED ON 3/27/2025
 public class Car {
     private Position carPos;
+    private Stop startingPoint;
     private Stop target;
     private double speed;
     private ArrayList<Stop> stops;
@@ -12,8 +12,9 @@ public class Car {
     private int numOfStops;
     private Track track;
 
-    public Car (Engine engine, Tire tire, Stop target, Stop startingPoint, Track track) {
-        this.target = target;
+    public Car (Engine engine, Tire tire, Stop startingPoint, Track track) {
+        this.startingPoint = startingPoint;
+        this.target = startingPoint.getNextStop();
         this.speed = (engine.getSpeedValue() + tire.getSpeedValue())*0.02;
         this.track = track;
         carPos = startingPoint.getStopPos();
@@ -23,6 +24,10 @@ public class Car {
 
     public void setStops (ArrayList<Stop> stops) {
         this.stops = stops;
+    }
+
+    public Stop getTarget() {
+        return target;
     }
     
     public void updateTarget (Stop newTarget) {

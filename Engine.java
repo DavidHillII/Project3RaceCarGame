@@ -1,4 +1,4 @@
-// Class for engine
+//FINISHED ON 3/27/2025
 public class Engine {
     private final double speedValue;
     private final String engineName;

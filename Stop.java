@@ -1,3 +1,4 @@
+//FINISHED ON 3/27/2025
 public class Stop {
     //Stop is allowed to know its position and the next Stop
     private Position stopPos;

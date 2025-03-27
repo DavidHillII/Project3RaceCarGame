@@ -13,6 +13,7 @@ import java.awt.geom.Point2D;
 
 
 /**
+ * FINISHED ON 3/27/2025
  * Car Racing Game GUI
  * Manages game screens, timer, and user interaction.
  * Author: Anna Zadorenko
@@ -319,17 +320,16 @@ public class RaceGUI {
         DLabel.setForeground(Color.WHITE);
         gamePanel.add(DLabel);
 
-        //adds the aforementioned Stops to the ArrayList of stops.
-        stops = track.getStops();
-        for (int i = 0; i < stops.size(); i++) {
-            if (i == stops.size() - 1) {
-                //if its the last stop, the next stop is the first stop
-                stops.get(i).setNextStop(stops.get(0));
+        for (int i = 0; i < track.getStops().size(); i++) {
+            if (i == track.getStops().size() - 1) {
+                track.getStops().get(i).setNextStop(track.getStops().getFirst());
             }
             else {
-                stops.get(i).setNextStop(stops.get(i + 1));
+                track.getStops().get(i).setNextStop(track.getStops().get(i + 1));
             }
         }
+        //adds the aforementioned Stops to the ArrayList of stops.
+        stops = track.getStops();
 
         //Creating Engines
         Engine V4engine = new Engine(50, "V4");
@@ -356,10 +356,11 @@ public class RaceGUI {
         tires.add(GoodyearTire);
 
         //Making and Storing Cars
-        listOfCars.add(new Car(randomObject(engines), randomObject(tires), stops.get(3), stops.get(0), track));
-        listOfCars.add(new Car(randomObject(engines), randomObject(tires), stops.get(0), stops.get(1), track));
-        listOfCars.add(new Car(randomObject(engines), randomObject(tires), stops.get(1), stops.get(2), track));
-        listOfCars.add(new Car(randomObject(engines), randomObject(tires), stops.get(2), stops.get(3), track));
+
+        listOfCars.add(new Car(randomObject(engines), randomObject(tires), stops.get(0), track));
+        listOfCars.add(new Car(randomObject(engines), randomObject(tires), stops.get(1), track));
+        listOfCars.add(new Car(randomObject(engines), randomObject(tires), stops.get(2), track));
+        listOfCars.add(new Car(randomObject(engines), randomObject(tires), stops.get(3), track));
 
         //hands the track to the logicHandler
         logicHandler.setTrack(track);
@@ -444,10 +445,9 @@ public class RaceGUI {
         gamePanel.revalidate();
         gamePanel.repaint();
     }
-
     private void startRace() {
         System.out.println("Starting Race");
-        logicHandler.beginRace();
+        //logicHandler.beginRace();
         listOfCars = logicHandler.getListOfCars();
         startRaceButton.setEnabled(false);
         Random random = new Random();
@@ -464,8 +464,20 @@ public class RaceGUI {
         }
 
         raceTimer = new Timer(40, new ActionListener() {
+
             @Override
             public void actionPerformed(ActionEvent e) {
+                //debugging
+                System.out.println(listOfCars.size());
+                for (int i = 0; i < 4; i++) {
+                    if (listOfCars.get(i).getTarget() == null) {
+                        System.out.println(i + ": Target is null");
+                    }
+                    else {
+                        System.out.println(i + ": Target is " + listOfCars.get(i).getTarget());
+                    }
+                }
+
                 for (int i = 0; i < listOfCars.size(); i++) {
                     if (carFinished[i]) continue;
                     Car car = listOfCars.get(i);
@@ -577,10 +589,10 @@ public class RaceGUI {
 
         // Create fresh Car objects with new random engine/tire
         listOfCars.clear();
-        listOfCars.add(new Car(randomObject(engines), randomObject(tires), stops.get(3), stops.get(0), track));
-        listOfCars.add(new Car(randomObject(engines), randomObject(tires), stops.get(0), stops.get(1), track));
-        listOfCars.add(new Car(randomObject(engines), randomObject(tires), stops.get(1), stops.get(2), track));
-        listOfCars.add(new Car(randomObject(engines), randomObject(tires), stops.get(2), stops.get(3), track));
+        listOfCars.add(new Car(randomObject(engines), randomObject(tires), stops.get(0), track));
+        listOfCars.add(new Car(randomObject(engines), randomObject(tires), stops.get(1), track));
+        listOfCars.add(new Car(randomObject(engines), randomObject(tires), stops.get(2), track));
+        listOfCars.add(new Car(randomObject(engines), randomObject(tires), stops.get(3), track));
 
         logicHandler.setListOfCars(listOfCars); // Let logic handler know about new cars
 
