@@ -16,6 +16,7 @@ public class Car {
         this.target = target;
         this.speed = engine.getSpeedValue() + tire.getSpeedValue();
         this.track = track;
+        carPos = startingPoint.getStopPos();
         numOfStops = track.getStops().size();
         stopsPassed = 0;
     }
