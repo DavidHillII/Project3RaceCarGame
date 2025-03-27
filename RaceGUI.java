@@ -467,11 +467,40 @@ public class RaceGUI {
             @Override
             public void actionPerformed(ActionEvent e) {
                 for (int i = 0; i < listOfCars.size(); i++) {
+                    if (carFinished[i]) continue;
                     Car car = listOfCars.get(i);
+                    long elapsedMillis = System.currentTimeMillis() - startTime;
+                    double elapsedSeconds = elapsedMillis / 1000.0;
+                    raceTimeLabel.setText(String.format("Race Time: %.1fs", elapsedSeconds));
+
+
+// Save old position
+                    double prevX = car.getCarPos().getX();
+                    double prevY = car.getCarPos().getY();
+
+// Move car
                     car.move();
+
+// Get new position
                     double newX = car.getCarPos().getX();
                     double newY = car.getCarPos().getY();
+
+// Calculate direction change
+                    double dx = newX - prevX;
+                    double dy = newY - prevY;
+
+// Compute angle of movement
+                    double angle = Math.atan2(dy, dx);
+                    double degrees = Math.toDegrees(angle);
+
+// Snap to nearest 90 degrees (e.g., 0°, 90°, 180°, 270°)
+                    double snapped = Math.round(degrees / 90.0) * 90.0;
+                    double snappedRadians = Math.toRadians(snapped);
+
+// Update visual
                     cars[i].setLocationDouble(newX, newY);
+                    cars[i].setRotationAngle(snappedRadians);
+
 
                     if (car.isWinner() && !carFinished[i]) {
                         carFinished[i] = true;
@@ -536,15 +565,52 @@ public class RaceGUI {
         // Remove previous car components from the game panel
         for (CarComponent car : cars) {
             gamePanel.remove(car);
+            cars = new CarComponent[4]; // Reset the array
+
         }
 
-        // Reset car positions to initial starting values
-        carX = new double[]{1170, 1170, 340, 340};
+        // Reset carFinished flags and finish times
+        for (int i = 0; i < 4; i++) {
+            carFinished[i] = false;
+            finishTimes[i] = 0;
+        }
 
-        // Recreate cars at starting positions
+        // Create fresh Car objects with new random engine/tire
+        listOfCars.clear();
+        listOfCars.add(new Car(randomObject(engines), randomObject(tires), stops.get(3), stops.get(0), track));
+        listOfCars.add(new Car(randomObject(engines), randomObject(tires), stops.get(0), stops.get(1), track));
+        listOfCars.add(new Car(randomObject(engines), randomObject(tires), stops.get(1), stops.get(2), track));
+        listOfCars.add(new Car(randomObject(engines), randomObject(tires), stops.get(2), stops.get(3), track));
+
+        logicHandler.setListOfCars(listOfCars); // Let logic handler know about new cars
+
+        // Reset car positions
+        carX = new double[]{
+                listOfCars.get(0).getCarPos().getX(),
+                listOfCars.get(1).getCarPos().getX(),
+                listOfCars.get(2).getCarPos().getX(),
+                listOfCars.get(3).getCarPos().getX()
+        };
+
+        carY = new double[]{
+                listOfCars.get(0).getCarPos().getY(),
+                listOfCars.get(1).getCarPos().getY(),
+                listOfCars.get(2).getCarPos().getY(),
+                listOfCars.get(3).getCarPos().getY()
+        };
+
+        // Recreate CarComponent visuals
         for (int i = 0; i < 4; i++) {
             int selectedIndex = colorPickers[i].getSelectedIndex();
             cars[i] = new CarComponent(carImagePaths[selectedIndex], carX[i], carY[i]);
+
+            switch (i) {
+                case 0 -> cars[i].setRotationAngle(Math.toRadians(-90));
+                case 1 -> cars[i].setRotationAngle(Math.toRadians(180));
+                case 2 -> cars[i].setRotationAngle(Math.toRadians(90));
+                case 3 -> cars[i].setRotationAngle(Math.toRadians(0));
+            }
+
             gamePanel.add(cars[i]);
         }
 

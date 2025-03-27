@@ -14,7 +14,7 @@ public class Car {
 
     public Car (Engine engine, Tire tire, Stop target, Stop startingPoint, Track track) {
         this.target = target;
-        this.speed = engine.getSpeedValue() + tire.getSpeedValue();
+        this.speed = (engine.getSpeedValue() + tire.getSpeedValue())*0.02;
         this.track = track;
         carPos = startingPoint.getStopPos();
         numOfStops = track.getStops().size();
@@ -54,6 +54,7 @@ public class Car {
 
     //This method not only moves the car, it also finds the direction it needs to move in.
     public void move() {
+        if (isWinner()) return;
         double carX = carPos.getX();
         double carY = carPos.getY();
         double stopX = target.getStopPos().getX();
